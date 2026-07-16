@@ -107,8 +107,8 @@ function formatFileSize(bytes) {
 }
 
 const YTDLP_EXTRAS = process.platform !== 'win32'
-    ? ['--js-runtimes', 'nodejs', '--extractor-args', 'youtube:player_client=web,android']
-    : ['--extractor-args', 'youtube:player_client=web,android'];
+    ? ['--js-runtimes', 'node', '--extractor-args', 'youtube:player_client=mweb']
+    : ['--extractor-args', 'youtube:player_client=mweb'];
 
 function getYtdlpInfo(url) {
     return new Promise((resolve, reject) => {
