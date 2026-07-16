@@ -6,8 +6,8 @@ const path = require('path');
 const fs = require('fs');
 
 const app = express();
-const PORT = 3000;
-const YTDLP_PATH = path.join(__dirname, 'yt-dlp.exe');
+const PORT = process.env.PORT || 3000;
+const YTDLP_PATH = path.join(__dirname, process.platform === 'win32' ? 'yt-dlp.exe' : 'yt-dlp');
 
 app.use(cors());
 app.use(express.json());
