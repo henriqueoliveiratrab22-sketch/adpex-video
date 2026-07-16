@@ -4,10 +4,46 @@ const ytSearch = require('yt-search');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
+const https = require('https');
+const http = require('http');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const YTDLP_PATH = path.join(__dirname, process.platform === 'win32' ? 'yt-dlp.exe' : 'yt-dlp');
+
+function downloadYtdlp() {
+    return new Promise((resolve, reject) => {
+        if (fs.existsSync(YTDLP_PATH)) {
+            return resolve();
+        }
+        const isWin = process.platform === 'win32';
+        const url = isWin
+            ? 'https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.exe'
+            : 'https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp';
+        console.log('Baixando yt-dlp de:', url);
+        const follow = (u) => {
+            const mod = u.startsWith('https') ? https : http;
+            mod.get(u, { headers: { 'User-Agent': 'node' } }, (res) => {
+                if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+                    return follow(res.headers.location);
+                }
+                if (res.statusCode !== 200) {
+                    return reject(new Error('HTTP ' + res.statusCode));
+                }
+                const file = fs.createWriteStream(YTDLP_PATH);
+                res.pipe(file);
+                file.on('finish', () => {
+                    file.close();
+                    if (!isWin) fs.chmodSync(YTDLP_PATH, 0o755);
+                    console.log('yt-dlp baixado com sucesso!');
+                    resolve();
+                });
+                file.on('error', reject);
+            }).on('error', reject);
+        };
+        follow(url);
+    });
+}
 
 app.use(cors());
 app.use(express.json());
@@ -304,6 +340,11 @@ app.get('/api/download', async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`Servidor ADPEX Video rodando em http://localhost:${PORT}`);
+downloadYtdlp().then(() => {
+    app.listen(PORT, () => {
+        console.log(`Servidor ADPEX Video rodando em http://localhost:${PORT}`);
+    });
+}).catch((err) => {
+    console.error('Falha ao baixar yt-dlp:', err.message);
+    process.exit(1);
 });
