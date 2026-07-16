@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADPEX Video - Download de Vídeos</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="23 7 16 12 23 17 23 7" stroke-linejoin="round"/>
+                        <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                    </svg>
+                </div>
+                <h1>ADPEX <span>Video</span></h1>
+            </div>
+            <p class="subtitle">Baixe vídeos do YouTube para seus projetos da igreja</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Abas: Pesquisar / Colar Link -->
+        <div class="mode-tabs">
+            <button class="mode-btn active" data-mode="search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"/>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+                Pesquisar
+            </button>
+            <button class="mode-btn" data-mode="link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                </svg>
+                Colar Link
+            </button>
+        </div>
+
+        <!-- Modo Pesquisar -->
+        <section id="searchMode" class="mode-section">
+            <div class="card">
+                <div class="card-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                    </svg>
+                </div>
+                <h2>Pesquisar no YouTube</h2>
+                <div class="input-group">
+                    <input 
+                        type="text" 
+                        id="searchQuery" 
+                        placeholder="Pesquisar músicas, cultos, pregações..." 
+                        autocomplete="off"
+                    />
+                    <button id="searchBtn" class="btn btn-primary">
+                        <span class="btn-text">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                <circle cx="11" cy="11" r="8"/>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                            </svg>
+                            Pesquisar
+                        </span>
+                        <div class="spinner"></div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Resultados da Pesquisa -->
+            <div id="searchResults" class="search-results hidden"></div>
+        </section>
+
+        <!-- Modo Colar Link -->
+        <section id="linkMode" class="mode-section hidden">
+            <div class="card">
+                <div class="card-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                    </svg>
+                </div>
+                <h2>Cole o link do vídeo</h2>
+                <div class="input-group">
+                    <input 
+                        type="url" 
+                        id="videoUrl" 
+                        placeholder="https://www.youtube.com/watch?v=..." 
+                        autocomplete="off"
+                    />
+                    <button id="fetchBtn" class="btn btn-primary">
+                        <span class="btn-text">Buscar Vídeo</span>
+                        <div class="spinner"></div>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Error Message -->
+        <div id="errorMessage" class="error-message">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="15" y1="9" x2="9" y2="15"/>
+                <line x1="9" y1="9" x2="15" y2="15"/>
+            </svg>
+            <span id="errorText"></span>
+        </div>
+
+        <!-- Video Info Section -->
+        <section id="videoInfo" class="video-info hidden">
+            <button id="backBtn" class="btn-back">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="19" y1="12" x2="5" y2="12"/>
+                    <polyline points="12 19 5 12 12 5"/>
+                </svg>
+                Voltar
+            </button>
+
+            <div class="video-card">
+                <div class="video-thumbnail">
+                    <img id="thumbnail" src="" alt="Thumbnail do vídeo">
+                    <span id="duration" class="duration-badge"></span>
+                </div>
+                <div class="video-details">
+                    <h3 id="videoTitle"></h3>
+                    <div class="video-meta">
+                        <span class="meta-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                            <span id="author"></span>
+                        </span>
+                        <span class="meta-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                            <span id="views"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Format Selection -->
+            <div class="formats-section">
+                <div class="format-tabs">
+                    <button class="tab-btn active" data-tab="video">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="23 7 16 12 23 17 23 7"/>
+                            <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                        </svg>
+                        Vídeo
+                    </button>
+                    <button class="tab-btn" data-tab="audio">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 18V5l12-2v13"/>
+                            <circle cx="6" cy="18" r="3"/>
+                            <circle cx="18" cy="16" r="3"/>
+                        </svg>
+                        Áudio
+                    </button>
+                </div>
+
+                <div id="videoFormats" class="formats-list"></div>
+                <div id="audioFormats" class="formats-list hidden"></div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>ADPEX Video &copy; 2026 - Ferramenta para ministério da igreja</p>
+        </footer>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+node_modules/
+downloads/
+*.log
+server_log.txt
+player-script.js
+*-player-script.js
+yt-dlp.exe

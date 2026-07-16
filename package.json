@@ -1,0 +1,25 @@
+{
+  "name": "adpex-video",
+  "version": "1.0.0",
+  "description": "Site para download de vídeos do YouTube - Ferramenta para ministério da igreja",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "youtube",
+    "download",
+    "video",
+    "igreja",
+    "adpex"
+  ],
+  "author": "ADPEX",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "yt-search": "^2.13.1"
+  }
+}
