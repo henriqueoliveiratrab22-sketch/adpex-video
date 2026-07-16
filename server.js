@@ -106,9 +106,13 @@ function formatFileSize(bytes) {
     return mb.toFixed(1) + ' MB';
 }
 
+const YTDLP_EXTRAS = process.platform !== 'win32'
+    ? ['--js-runtimes', 'nodejs', '--extractor-args', 'youtube:player_client=web,android']
+    : ['--extractor-args', 'youtube:player_client=web,android'];
+
 function getYtdlpInfo(url) {
     return new Promise((resolve, reject) => {
-        const proc = spawn(YTDLP_PATH, ['-j', '--no-playlist', url], {
+        const proc = spawn(YTDLP_PATH, ['-j', '--no-playlist', ...YTDLP_EXTRAS, url], {
             timeout: 30000,
             windowsHide: true
         });
@@ -276,7 +280,7 @@ app.get('/api/download', async (req, res) => {
         const container = type === 'audio' ? 'mp3' : 'mp4';
         const mime = type === 'audio' ? 'audio/mpeg' : 'video/mp4';
 
-        let args = ['--no-playlist', '-o', '-', '--no-warnings'];
+        let args = ['--no-playlist', '-o', '-', '--no-warnings', ...YTDLP_EXTRAS];
 
         if (type === 'audio') {
             if (format_id) {
