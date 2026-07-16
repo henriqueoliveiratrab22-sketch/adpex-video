@@ -324,7 +324,7 @@ async function downloadVideo(formatId, type, quality) {
 
         const contentDisposition = response.headers.get('Content-Disposition');
         let filename = `video_${quality || 'download'}.mp4`;
-        if (type === 'audio') filename = `audio_${quality || 'download'}.mp3`;
+        if (type === 'audio') filename = `audio_${quality || 'download'}.m4a`;
 
         if (contentDisposition) {
             const match = contentDisposition.match(/filename="?([^";\n]+)"?/);

@@ -5,12 +5,20 @@ const https = require('https');
 const http = require('http');
 
 const isWin = process.platform === 'win32';
+const isLinux = process.platform === 'linux';
 const binaryName = isWin ? 'yt-dlp.exe' : 'yt-dlp';
 const binaryPath = path.join(__dirname, binaryName);
 
 if (fs.existsSync(binaryPath)) {
-    console.log('yt-dlp já existe, pulando download.');
-    process.exit(0);
+    console.log('yt-dlp ja existe em:', binaryPath);
+    try {
+        execSync(`"${binaryPath}" --version`, { stdio: 'pipe' });
+        console.log('yt-dlp funcionando.');
+        process.exit(0);
+    } catch (e) {
+        console.log('yt-dlp existe mas falhou, rebaixando...');
+        fs.unlinkSync(binaryPath);
+    }
 }
 
 const url = isWin
@@ -46,7 +54,9 @@ function download(targetUrl, dest) {
         if (!isWin) {
             fs.chmodSync(binaryPath, 0o755);
         }
-        console.log('yt-dlp baixado com sucesso!');
+        console.log('yt-dlp baixado com sucesso em:', binaryPath);
+        const ver = execSync(`"${binaryPath}" --version`, { encoding: 'utf8' }).trim();
+        console.log('Versao:', ver);
     } catch (err) {
         console.error('Falha ao baixar yt-dlp:', err.message);
         process.exit(1);

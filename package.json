@@ -4,9 +4,8 @@
   "description": "Site para download de vídeos do YouTube - Ferramenta para ministério da igreja",
   "main": "server.js",
   "scripts": {
-    "build": "node setup.js",
-    "start": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "preinstall": "node setup.js",
+    "start": "node server.js"
   },
   "keywords": [
     "youtube",
